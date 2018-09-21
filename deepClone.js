@@ -1,6 +1,3 @@
-
-//可拷贝对象的原型，无法枚举的键，Symbol键，无法准确拷贝错误对象，浅拷贝空指针对象和函数对象（环形对象有待考虑）
-
 const deepClone = function (obj) {
     if(obj === null) return null //空指针就返回
     if(obj.constructor===Date) return new Date(obj);   //日期对象就返回一个新的日期对象
