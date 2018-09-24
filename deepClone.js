@@ -1,20 +1,24 @@
-const deepClone = function (obj) {
-    if(obj === null) return null //空指针就返回
+const deepClone = function (obj, hash = new WeakMap()) {
+    if(obj === null) return null; //空指针就返回
     if(obj.constructor===Date) return new Date(obj);   //日期对象就返回一个新的日期对象
     if(obj.constructor === RegExp) return new RegExp(obj);  //正则对象就返回一个新的正则对象
     if(obj.constructor === Error){return new Error(obj.message)}  //正则对象就返回一个新的正则对象
+    if (hash.has(obj)) return hash.get(obj)
 
-    let allDesc = Object.getOwnPropertyDescriptors(obj)      //遍历传入参数所有键的特性
-    let newObj = Object.create(Object.getPrototypeOf(obj),allDesc)  //继承原型链
+    let allDesc = Object.getOwnPropertyDescriptors(obj) ;     //遍历传入参数所有键的特性
+    let cloneObj = Object.create(Object.getPrototypeOf(obj),allDesc); //继承原型链
+
+    hash.set(obj, cloneObj)
 
     for(let key of   Reflect.ownKeys(obj)){   //Reflect.ownKeys(obj) = [...Object.getOwnPropertyNames(obj),...Object.getOwnPropertySymbols(obj)]
-        newObj[key] = typeof obj[key] === 'object' ? arguments.callee(obj[key]) : obj[key]; // 使用arguments.callee解除与函数名的耦合
+        cloneObj[key] = typeof obj[key] === 'object' ? deepClone(obj[key],hash) : obj[key]; // 如果值是引用类型则递归调用deepClone
     }
-    return newObj;
+    return cloneObj;
 };
 
 
 let obj = {
+    nan :NaN,
     num: 0,
     str: '',
     boolean: true,
@@ -31,18 +35,22 @@ let obj = {
     date: new Date(0),
     reg: new RegExp('/我是一个正则/ig'),
     err: new Error('我是一个错误'),
-    [Symbol('1')]:1
-}
-Object.defineProperty(obj,'unenumerable',{
+    [Symbol('1')]:1,
+};
+
+Object.defineProperty(obj,'innumerable',{
     enumerable:false,
     value:'123'
-})
+});
 
+obj = Object.create(obj,Object.getOwnPropertyDescriptors(obj))
 
+obj.loop = obj
 
-let cloneObj = deepClone(obj)
-console.log(obj)
-console.log(cloneObj)
+let cloneObj = deepClone(obj);
+
+console.log('obj',obj);
+console.log('cloneObj',cloneObj);
 
 
 for (let key of Object.keys(cloneObj)) {
