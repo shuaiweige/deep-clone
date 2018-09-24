@@ -2,7 +2,6 @@ const deepClone = function (obj, hash = new WeakMap()) {
     if(obj === null) return null; //空指针就返回
     if(obj.constructor===Date) return new Date(obj);   //日期对象就返回一个新的日期对象
     if(obj.constructor === RegExp) return new RegExp(obj);  //正则对象就返回一个新的正则对象
-    if(obj.constructor === Error){return new Error(obj.message)}  //正则对象就返回一个新的正则对象
     if (hash.has(obj)) return hash.get(obj)
 
     let allDesc = Object.getOwnPropertyDescriptors(obj) ;     //遍历传入参数所有键的特性
@@ -18,7 +17,6 @@ const deepClone = function (obj, hash = new WeakMap()) {
 
 
 let obj = {
-    nan :NaN,
     num: 0,
     str: '',
     boolean: true,
@@ -34,7 +32,6 @@ let obj = {
     },
     date: new Date(0),
     reg: new RegExp('/我是一个正则/ig'),
-    err: new Error('我是一个错误'),
     [Symbol('1')]:1,
 };
 
