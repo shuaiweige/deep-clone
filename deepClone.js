@@ -37,7 +37,7 @@ let obj = {
 
 Object.defineProperty(obj,'innumerable',{
     enumerable:false,
-    value:'123'
+    value:'不可枚举属性'
 });
 
 obj = Object.create(obj,Object.getOwnPropertyDescriptors(obj))
