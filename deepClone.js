@@ -3,6 +3,8 @@ const deepClone = function (obj, hash = new WeakMap()) {
     if (obj === null) return null; //空指针就返回
     if (obj.constructor === Date) return new Date(obj);   //日期对象就返回一个新的日期对象
     if (obj.constructor === RegExp) return new RegExp(obj);  //正则对象就返回一个新的正则对象
+
+    //如果成环了,参数obj = obj.loop = 最初的obj 会在WeakMap中找到第一次放入的obj提前返回第一次放入WeakMap的cloneObj
     if (hash.has(obj)) return hash.get(obj)
 
     let allDesc = Object.getOwnPropertyDescriptors(obj);     //遍历传入参数所有键的特性
