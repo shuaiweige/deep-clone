@@ -1,6 +1,7 @@
+const isComplexDataType = obj => (typeof obj === 'object' || typeof obj === 'function') && (obj !== null)
+
 const deepClone = function (obj, hash = new WeakMap()) {
 
-    if (obj === null) return null; //空指针就返回
     if (obj.constructor === Date) return new Date(obj);   //日期对象就返回一个新的日期对象
     if (obj.constructor === RegExp) return new RegExp(obj);  //正则对象就返回一个新的正则对象
 
@@ -13,7 +14,10 @@ const deepClone = function (obj, hash = new WeakMap()) {
     hash.set(obj, cloneObj)
 
     for (let key of Reflect.ownKeys(obj)) {   //Reflect.ownKeys(obj)可以拷贝不可枚举属性和符号类型
-        cloneObj[key] = typeof obj[key] === 'object' ? deepClone(obj[key], hash) : obj[key]; // 如果值是引用类型则递归调用deepClone
+        // 如果值是引用类型(非函数)则递归调用deepClone
+        cloneObj[key] =
+            (isComplexDataType(obj[key]) && typeof obj[key] !== 'function') ?
+                deepClone(obj[key], hash) : obj[key];
     }
     return cloneObj;
 };
