@@ -1,6 +1,8 @@
 # deepClone
 **使用递归的方法深拷贝对象**
 
+[博客](https://juejin.im/post/5c26dd8fe51d4570c053e08b)
+
 > 可以深拷贝的对象
 1. 对象的原型
 
@@ -17,4 +19,4 @@
 
 2. 函数对象
 
-[博客](https://www.jianshu.com/p/c651aeabf582)
+
