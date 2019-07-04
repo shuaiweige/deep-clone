@@ -3,12 +3,12 @@ const deepClone = function (obj) {
     let stack = [
         {
             parent: obj,
-            key: null,
+            key: "",
             data: obj
         }
     ]
     //设置哈希表
-    let s = new Set() 
+    let s = new Set()
 
     while (stack.length) {
         let item = stack.pop()
@@ -29,17 +29,18 @@ const deepClone = function (obj) {
             continue
         }
 
-        Object.keys(data).forEach(k => {
-            if (typeof data[k] === 'object' && data[k]) {
+        Object.keys(data).forEach(prop => {
+            if (typeof data[prop] === 'object' && data[prop]) {
                 stack.push({
-                    //parent不能是data，需要是正在赋值的对象（该对象没有当前值是对象的属性）
+                    // parent不能是data，需要是正在赋值的对象（该对象没有当前值是对象的属性）
+                    // 即新创建的空对象/数组
                     parent: res,
-                    key: k,
-                    data: data[k]
+                    key: prop,
+                    data: data[prop]
                 })
                 s.add(data)
             } else {
-                res[k] = data[k]
+                res[prop] = data[prop]
             }
         })
     }
