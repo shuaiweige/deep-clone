@@ -40,7 +40,7 @@ let obj = {
         console.log('我是一个函数')
     },
     date: new Date(0),
-    reg: new RegExp('/我是一个正则/ig'),
+    reg: new RegExp('我是一个正则','ig'),
     [Symbol('1')]: 1,
 };
 
@@ -59,8 +59,9 @@ console.log('obj', obj);
 console.log('cloneObj', cloneObj);
 
 
-for (let key of Object.keys(cloneObj)) {
+// 对比 2 个对象的引用类型的值是相同
+Object.keys(cloneObj).filter(key=>key !== 'nul').forEach(key=>{
     if (typeof cloneObj[key] === 'object' || typeof cloneObj[key] === 'function') {
         console.log(`${key}相同吗？ `, cloneObj[key] === obj[key])
     }
-}
+})
